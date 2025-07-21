@@ -74,7 +74,7 @@ Nos conectamos fácilmente a tus herramientas actuales para ayudarte a ahorrar t
 
         <div className="flex flex-1 lg:w-1/2 lg:h-auto relative lg:max-w-non lg:mx-0 mx-auto max-w-3xl">
           <img
-            src="../public/assets/personaaaa.png"
+            src="/assets/personaaaa.png"
             alt="Hero image"
             width={2350}
             height={2359}
