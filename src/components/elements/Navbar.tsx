@@ -1,7 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Container } from "../shared/Container";
 import logo from "/assets/icon.svg";
-import { NavItem } from "../shared/NavItem";
-import { BtnLink } from "../shared/BtnLink";
 import { useThemeStore } from "../../store/ThemeStore";
 
 export const navItems = [
@@ -13,84 +14,129 @@ export const navItems = [
 
 export const Navbar = () => {
   const { toggleTheme, theme } = useThemeStore();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 6);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50 py-6">
-      <Container>
-        <nav className="w-full flex justify-between gap-6 relative">
-          {/* Logo */}
-          <div className="min-w-max inline-flex relative">
-            <a href="/" className="relative flex items-center gap-3">
-              <img src={logo} alt="EdgeAI Logo" className="w-10 h-10" />
-              <div className="inline-flex text-lg font-semibold text-heading-1">
-               AutonIAc 
+    <header className={`sticky top-0 z-50 transition-all ${scrolled ? "shadow-[0_10px_30px_-12px_rgba(21,45,94,0.25)]" : ""}`}>
+      <div className="relative">
+        <div className="absolute inset-0 -z-10 rounded-b-3xl brand-gradient opacity-25 blur-md" />
+        <div className="backdrop-blur bg-white/60 dark:bg-black/30 border-b border-white/10">
+          <Container>
+            <nav className="h-16 flex items-center justify-between">
+              {/* Logo + nombre */}
+              <a href="/" className="flex items-center gap-3 group">
+                <span className="relative grid place-items-center">
+                  <img src={logo} alt="vexIA" className="w-9 h-9" />
+                  <span className="pointer-events-none absolute inset-0 rounded-full blur-lg brand-gradient opacity-0 group-hover:opacity-100 transition" />
+                </span>
+                <span className="font-semibold tracking-tight text-heading-1">
+                  vex<span className="text-transparent bg-clip-text brand-gradient">IA</span>
+                </span>
+              </a>
+
+              {/* Nav desktop */}
+              <ul className="hidden lg:flex items-center gap-1 text-heading-2">
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      className="group relative px-3 py-2 rounded-md hover:text-heading-1
+                                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]"
+                    >
+                      <span>{item.text}</span>
+                      <span className="pointer-events-none absolute left-3 right-3 -bottom-[2px] h-px scale-x-0 origin-left brand-gradient transition-transform duration-300 group-hover:scale-x-100" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA + toggle + burger */}
+              <div className="flex items-center gap-2">
+                <a
+                  href="#cta"
+                  className="hidden sm:inline-flex items-center rounded-full px-4 py-2 text-sm
+                             bg-primary text-[rgb(var(--ink-inverse))] hover:opacity-90 transition
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]"
+                >
+                  Empecemos
+                </a>
+
+                {/* Theme toggle */}
+                <button
+                  onClick={toggleTheme}
+                  aria-label="Cambiar tema"
+                  className="relative grid place-items-center rounded-full p-2 border border-white/10
+                             hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]"
+                >
+                  {theme === "dark" ? (
+                    <svg width="22" height="22" viewBox="0 0 24 24" className="opacity-90">
+                      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  ) : (
+                    <svg width="22" height="22" viewBox="0 0 24 24" className="opacity-90">
+                      <path d="M12 3v2m6.364.636l-1.414 1.414M21 12h-2m-.636 6.364l-1.414-1.414M12 19v2M6.05 17.95l-1.414 1.414M5 12H3m3.05-5.95L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                  <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-white/10" />
+                </button>
+
+                {/* Burger */}
+                <button
+                  onClick={() => setOpen((v) => !v)}
+                  aria-label="Abrir menú"
+                  className="lg:hidden relative grid place-items-center rounded-md p-2 border border-white/10
+                             hover:bg-white/10 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]"
+                >
+                  <div className="w-5 space-y-1.5">
+                    <span className={`block h-[2px] rounded bg-current transition-transform ${open ? "translate-y-[5px] rotate-45" : ""}`} />
+                    <span className={`block h-[2px] rounded bg-current transition-opacity ${open ? "opacity-0" : "opacity-100"}`} />
+                    <span className={`block h-[2px] rounded bg-current transition-transform ${open ? "-translate-y-[5px] -rotate-45" : ""}`} />
+                  </div>
+                </button>
               </div>
-            </a>
-          </div>
+            </nav>
+          </Container>
+        </div>
+      </div>
 
-          <div
-            className="flex flex-col lg:flex-row w-full lg:justify-between lg:items-center 
-                      absolute top-full left-0 lg:static lg:top-0 bg-body lg:bg-transparent 
-                      border-x border-x-box-border lg:border-x-0 lg:h-auto h-0 overflow-hidden"
-          >
-            <ul
-              className="border-t border-box-border lg:border-t-0 px-6 lg:px-0 
-                           pt-6 lg:pt-0 flex flex-col lg:flex-row gap-y-4 gap-x-3 
-                           text-lg text-heading-2 w-full lg:justify-center lg:items-center"
-            >
-              {navItems.map((item, key) => (
-                <NavItem href={item.href} text={item.text} key={key} />
+      {/* Menú móvil */}
+      <div className={`lg:hidden overflow-hidden transition-[max-height] duration-300 ${open ? "max-h-96" : "max-h-0"}`}>
+        <div className="backdrop-blur bg-black/40 border-b border-white/10">
+          <Container>
+            <ul className="py-4 grid gap-1 text-heading-2">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="block px-3 py-2 rounded-md hover:bg-white/5 transition
+                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))]"
+                  >
+                    {item.text}
+                  </a>
+                </li>
               ))}
+              <li className="pt-2">
+                <a
+                  href="#cta"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex w-full items-center justify-center rounded-full px-4 py-2 bg-primary text-[rgb(var(--ink-inverse))] hover:opacity-90 transition"
+                >
+                  Empecemos
+                </a>
+              </li>
             </ul>
-            <div
-              className="lg:min-w-max flex items-center sm:w-max w-full pb-6 
-                            lg:pb-0 border-b border-box-border lg:border-0
-                            px-6 lg:px-0"
-            >
-              <BtnLink text="Empecemos" href="#cta" className="" />
-            </div>
-          </div>
-
-          <div className="min-w-max flex items-center gap-x-3">
-            <button
-              onClick={toggleTheme}
-              className="outline-hidden flex relative text-heading-2 rounded-full p-2 lg:p-3 border border-box-border cursor-pointer"
-            >
-              {theme === "dark" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
-        </nav>
-      </Container>
+          </Container>
+        </div>
+      </div>
     </header>
   );
 };

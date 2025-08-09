@@ -13,7 +13,7 @@ export const CTA = () => {
               {" "}
               Da el siguiente paso con{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-                Autoniac
+              vexIA
               </span>{" "}
             </h1>
             <Paragraph className="pt-10">

@@ -8,7 +8,7 @@ import { Services } from "./components/sections/Services";
 
 function App() {
   return (
-    <Layout title="EdgeAI">
+    <Layout title="vexIa">
       <Hero />
       <Services />
       <AboutUs />

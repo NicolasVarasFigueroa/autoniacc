@@ -1,47 +1,60 @@
 @import "tailwindcss";
 
+/* === Light tokens (por defecto) === */
 @theme {
-  --color-bg: 255 255 255;
-  --color-box: 255 255 255;
-  --box-border: 229 231 235;
-  --box-sd: 226 232 240 / 0.5;
-  --heading-1: 23 37 84;
-  --heading-2: 31 41 55;
-  --heading-3: 55 65 81;
+  /* Base + caja */
+  --color-bg: 247 242 240;        /* crema (#f7f2f0) */
+  --color-box: 255 255 255;       /* cards blancas */
+  --box-border: 21 45 94 / 0.10;  /* borde con primary */
+  --box-sd: 21 45 94 / 0.08;
+
+  /* Tipografía */
+  --heading-1: 4 7 13;            /* ink oscuro (#04070d) */
+  --heading-2: 21 45 94;          /* primary (#152d5e) */
+  --heading-3: 112 131 163;       /* muted (#7083a3) */
+
+  /* Marca */
+  --primary: 21 45 94;            /* azul profundo (#152d5e) */
+  --primary-700: 32 60 137;       /* azul fuerte (#203c89) */
+  --accent: 166 198 226;          /* celeste (#a6c6e2) */
+  --ink-inverse: 247 242 240;     /* texto sobre fondos oscuros */
 }
 
+/* === Dark tokens === */
 .dark {
-  --color-bg: 3 7 18;
-  --color-box: 17 24 39;
-  --box-border: 243 244 246 / 0.1;
-  --box-sd: transparent;
-  --heading-1: 255 255 255;
-  --heading-2: 243 244 246;
-  --heading-3: 209 213 219;
+  --color-bg: 4 7 13;             /* casi negro */
+  --color-box: 6 8 11;            /* panel oscuro (#06080b) */
+  --box-border: 166 198 226 / 0.12; /* borde con accent */
+  --box-sd: 0 0 0 / 0.0;
+
+  --heading-1: 247 242 240;       /* crema para títulos */
+  --heading-2: 166 198 226;       /* accent */
+  --heading-3: 112 131 163;       /* muted */
 }
 
+/* === Utilidades mapeadas a tokens === */
 @layer utilities {
-  .bg-body {
-    background-color: rgb(var(--color-bg));
-  }
-  .bg-box-bg {
-    background-color: rgb(var(--color-box));
-  }
-  .text-heading-1 {
-    color: rgb(var(--heading-1));
-  }
-  .text-heading-2 {
-    color: rgb(var(--heading-2));
-  }
-  .text-heading-3 {
-    color: rgb(var(--heading-3));
+  .bg-body { background-color: rgb(var(--color-bg)); }
+  .bg-box-bg { background-color: rgb(var(--color-box)); }
+  .text-heading-1 { color: rgb(var(--heading-1)); }
+  .text-heading-2 { color: rgb(var(--heading-2)); }
+  .text-heading-3 { color: rgb(var(--heading-3)); }
+
+  .bg-primary { background-color: rgb(var(--primary)); }
+  .text-primary { color: rgb(var(--primary)); }
+  .border-primary { border-color: rgb(var(--primary)); }
+  .bg-accent { background-color: rgb(var(--accent)); }
+  .text-accent { color: rgb(var(--accent)); }
+
+  /* Gradiente de marca */
+  .brand-gradient {
+    background-image: linear-gradient(
+      to right,
+      rgb(var(--primary)),
+      rgb(var(--accent))
+    );
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "Raleway", sans-serif;
-}
+html { scroll-behavior: smooth; }
+body { font-family: "Raleway", sans-serif; }
